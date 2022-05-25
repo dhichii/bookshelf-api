@@ -33,10 +33,10 @@ const addBookHandler = (request, h) => {
     updatedAt,
   };
 
-  if (name === '') {
+  if (name === '' || name === undefined) {
     return h.response({
       status: 'fail',
-      message: 'Gagal menambahkan buku. Mohon isi buku',
+      message: 'Gagal menambahkan buku. Mohon isi nama buku',
     }).code(400);
   }
 
