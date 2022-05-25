@@ -65,6 +65,44 @@ const addBookHandler = (request, h) => {
   }).code(500);
 };
 
+const getAllBooksHandler = (request, h) => {
+  const {
+    name,
+    reading,
+    finished,
+  } = request.query;
+  const allBooks = [...books.values()];
+  let booksByQuery = allBooks;
+
+  if (name !== undefined) {
+    booksByQuery =
+    allBooks.filter((entry) => entry.name.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  if (reading !== undefined) {
+    booksByQuery = allBooks.filter((entry) => !!Number(reading) === entry.reading);
+  }
+
+  if (finished !== undefined) {
+    booksByQuery = allBooks.filter((entry) => !!Number(finished) === entry.finished);
+  }
+
+  const booksResponse = booksByQuery.map((entry) => {
+    return {
+      id: entry.id,
+      name: entry.name,
+      publisher: entry.publisher,
+    };
+  });
+  return h.response({
+    status: 'success',
+    data: {
+      books: booksResponse,
+    },
+  }).code(200);
+};
+
 module.exports = {
   addBookHandler,
+  getAllBooksHandler,
 };
